@@ -1,0 +1,129 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Programming Exercise\n",
+    "\n",
+    "### alaTest / ValueChecker (ICSS) challenge 2021\n",
+    "\n",
+    "\n",
+    "Submission date:10-05-2021 by Rémy Ghalayini\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "\n",
+    "#### Assumptions\n",
+    "The solutions for this exercise can differ according to the way the user wants to insert operator entries. I have assumed that the user will enter the values manually, and hence my tailored solution according to this assumption.\n",
+    "\n",
+    "#### How to use\n",
+    "The solution is wrapped in a function, therefore please call a function called **find_cheapest_operator** with three variables in order to get the result:\n",
+    "* variable 1: a list containing the names of the operators. For example, insert ['operatorA', operatorB']\n",
+    "* variable 2: an array of operators' rates in the same order as the list above. Each rate should be a dictionary having as key the prefix and as value the rate. For example, insert ({1:0.9, 268:5.1, 46:0.17, 4620:0.0, 468:0.15, 4631:0.15, 4673:0.9, 46732:1.1}, {1:0.92, 44:0.5, 46:0.2, 467:1.0, 48:1.2}\n",
+    "* variable 3: the telephone number\n",
+    "\n",
+    "*an example entry is shown after the function call*"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def find_cheapest_operator(operators_list, rates, telephone):\n",
+    "    #transforming the telephone number to a string in order to make it simpler to loop through\n",
+    "    tel_num=str(telephone)\n",
+    "    \n",
+    "    #let's initiate a new empty dictionary to put the highest matching prefixes of each operator in\n",
+    "    highest_prefix_per_operator={}\n",
+    "    \n",
+    "    index=0\n",
+    "\n",
+    "\n",
+    "    #First: looping through the list of operators to analyse each operator alone\n",
+    "    for single_operator in rates:\n",
+    "        prefix_list=[]\n",
+    "        \n",
+    "        #copy the prefixes alone to another list\n",
+    "        for prefix in single_operator:\n",
+    "            prefix_list.append(str(prefix))\n",
+    "\n",
+    "        matching_numbers=[]\n",
+    "        \n",
+    "        #checking if there are matching prefixes with the telephone number and copying them to another list\n",
+    "        for i in prefix_list:\n",
+    "            if tel_num.startswith(i):\n",
+    "                matching_numbers.append(i)\n",
+    "\n",
+    "        #choosing the longest matching prefix if there is matching prefix\n",
+    "        if len(matching_numbers)>0:\n",
+    "            longest_match=int(max(matching_numbers, key=len))\n",
+    "    \n",
+    "            #copying both the longest matching prefix per operator and its rate to dictionary we created above\n",
+    "            for key in single_operator:\n",
+    "                if key==longest_match:\n",
+    "                    highest_prefix_per_operator[operators_list[index]] = {\"prefix\":key, \"rate\":single_operator[key]}\n",
+    "                \n",
+    "        index = index+1\n",
+    "        \n",
+    "    #once we repeat the for loop for each operator, we will end up with a nested dictionary having one longest \n",
+    "    #matching prefix per operator and its rate. Therefore, we will simply choose the cheapest rate and return the \n",
+    "    #respective operator\n",
+    "    if len(highest_prefix_per_operator)>0:\n",
+    "        key = min(highest_prefix_per_operator, key=lambda x: highest_prefix_per_operator[x][\"rate\"])\n",
+    "        return \"The cheapest operator is: \" + key \n",
+    "    \n",
+    "    #if there is no match between all the prefixes and the phone number, we return the following\n",
+    "    else:\n",
+    "        return \"no operator has a rate for this phone number\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "op_A={1:0.9, 268:5.1, 46:0.17, 4620:0.0, 468:0.15, 4631:0.15, 4673:0.9, 46732:1.1}\n",
+    "op_B={1:0.92, 44:0.5, 46:0.2, 467:1.0, 48:1.2}\n",
+    "tel=1209824324"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "find_cheapest_operator([\"operatorA\", \"operatorB\"], (op_A, op_B), tel)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
